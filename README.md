@@ -1,5 +1,3 @@
----
-
 # College Survival Sim 2.0 Edition
 
 ## Overview
