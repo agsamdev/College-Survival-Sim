@@ -1,5 +1,8 @@
 # College Survival Sim 2.0 Edition
 
+<img width="1815" height="840" alt="image" src="https://github.com/user-attachments/assets/ef1201a4-3b0d-4b35-b2a1-bae2f039cb44" />
+
+
 ## Overview
 
 **College Survival Sim** is a retro-styled, browser-based simulation game where you navigate the challenges of college life over 4 weeks. Manage your stats like stamina, stress, focus, and social life while engaging in minigames, romance, and various activities to survive and succeed in your final exams.
