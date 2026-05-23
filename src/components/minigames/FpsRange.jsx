@@ -151,14 +151,34 @@ export default function FpsRange({ onFinish }) {
       }
     };
 
+    const handleTouchMove = (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = CANVAS_W / rect.width;
+      const scaleY = CANVAS_H / rect.height;
+      gameRef.current.mouseX = (touch.clientX - rect.left) * scaleX;
+      gameRef.current.mouseY = (touch.clientY - rect.top) * scaleY;
+    };
+
+    const handleTouchStart = (e) => {
+      e.preventDefault();
+      handleTouchMove(e);
+      handleClick(e);
+    };
+
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("click", handleClick);
+    canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+    canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
 
     return () => {
       cancelAnimationFrame(animId);
       clearInterval(spawnInterval);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("click", handleClick);
+      canvas.removeEventListener("touchmove", handleTouchMove);
+      canvas.removeEventListener("touchstart", handleTouchStart);
     };
   }, []);
 
@@ -210,8 +230,18 @@ export default function FpsRange({ onFinish }) {
     }}>
       <div style={{ maxWidth: 620, width: "100%" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-          <div style={{ fontFamily: "'Press Start 2P'", fontSize: 10, color: "#FFD700", lineHeight: 1.8 }}>
-            🎯 SHOOTING RANGE
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <button onClick={() => onFinish(0)}
+              style={{
+                fontFamily: "'Press Start 2P'", fontSize: 5, padding: "6px 10px",
+                background: "#2a3a50", color: "#aaa", border: "none", borderRadius: 6,
+                cursor: "pointer", lineHeight: 1.6,
+              }}>
+              ◀ QUIT
+            </button>
+            <div style={{ fontFamily: "'Press Start 2P'", fontSize: 10, color: "#FFD700", lineHeight: 1.8 }}>
+              🎯 SHOOTING RANGE
+            </div>
           </div>
           <div style={{ fontFamily: "'VT323'", fontSize: 24, color: "#97C459" }}>
             Score: {score}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   INITIAL_STATE, TOTAL_WEEKS, TOTAL_DAYS,
   getGradeLetter, getDayName, TIME_SLOTS,
@@ -6,12 +6,35 @@ import {
 } from "./data/gameData";
 import GameScreen from "./components/GameScreen";
 import PlayerAvatar from "./components/PlayerAvatar";
+import LoginScreen from "./components/LoginScreen";
+import useAuth from "./hooks/useAuth";
 import { MAJORS } from "./data/majors";
 
 export default function App() {
+  const { user, loading, login, register, logout, saveGame, loadGame, getSaves, getAllUsers, switchUser } = useAuth();
   const [gs, setGs] = useState(INITIAL_STATE);
-  const [gamePhase, setGamePhase] = useState("intro");
+  const [gamePhase, setGamePhase] = useState("login");
   const [playerName, setPlayerName] = useState("");
+  const saveTimerRef = useRef(null);
+
+  // Auto-save every 30 seconds during gameplay
+  useEffect(() => {
+    if (gamePhase === "game" && user) {
+      saveTimerRef.current = setInterval(() => {
+        saveGame(gs);
+      }, 30000);
+    }
+    return () => {
+      if (saveTimerRef.current) clearInterval(saveTimerRef.current);
+    };
+  }, [gamePhase, user, gs, saveGame]);
+
+  // Save on game over
+  useEffect(() => {
+    if (gamePhase === "gameover" && user) {
+      saveGame(gs);
+    }
+  }, [gamePhase]);
 
   const startGame = () => {
     setGs({ ...INITIAL_STATE });
@@ -28,6 +51,24 @@ export default function App() {
     setGamePhase("gameover");
   };
 
+  const handleLogin = (u, p) => login(u, p);
+  const handleRegister = (u, p, d) => register(u, p, d);
+
+  const handleContinue = (savedState) => {
+    if (savedState) {
+      setGs(savedState);
+      if (savedState.major) {
+        setGamePhase("game");
+      } else {
+        setGamePhase("select_major");
+      }
+      setPlayerName(user?.displayName || "");
+    } else {
+      setPlayerName(user?.displayName || "");
+      startGame();
+    }
+  };
+
   // Load fonts
   useEffect(() => {
     const link = document.createElement("link");
@@ -36,6 +77,33 @@ export default function App() {
     document.head.appendChild(link);
   }, []);
 
+  if (loading) {
+    return (
+      <div style={{
+        fontFamily: "'Nunito',sans-serif", minHeight: "100vh",
+        background: "#0d1117", display: "flex", alignItems: "center",
+        justifyContent: "center", color: "#888",
+      }}>
+        <div style={{ fontFamily: "'VT323'", fontSize: 24 }}>Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user || gamePhase === "login") {
+    return (
+      <LoginScreen
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+        onContinue={handleContinue}
+        onLogout={logout}
+        onSwitchUser={switchUser}
+        user={user}
+        saves={getSaves()}
+        allUsers={getAllUsers()}
+      />
+    );
+  }
+
   // ── INTRO ─────────────────────────────────────────────────────────────────
   if (gamePhase === "intro") {
     return (
@@ -43,7 +111,6 @@ export default function App() {
         fontFamily: "'Nunito',sans-serif", minHeight: "100vh", background: "linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%)",
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "2rem 1rem",
       }}>
-        {/* Animated background particles */}
         <div style={{
           position: "fixed", inset: 0, overflow: "hidden", pointerEvents: "none",
         }}>
@@ -179,6 +246,18 @@ export default function App() {
           }}>
             Choose a major to start learning real concepts!
           </div>
+
+          <div style={{ marginTop: "1rem", display: "flex", gap: "0.5rem", justifyContent: "center" }}>
+            <button onClick={() => { logout(); setGamePhase("login"); }}
+              style={{
+                fontFamily: "'Press Start 2P'", fontSize: 6, padding: "8px 14px",
+                background: "transparent", color: "#E24B4A",
+                border: "1px solid #E24B4A40", borderRadius: 6, cursor: "pointer",
+                lineHeight: 1.6,
+              }}>
+              🚪 LOGOUT
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -248,7 +327,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Achievement section */}
             <div style={{
               borderTop: "1px solid #2a3a50", paddingTop: "0.75rem",
               display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap",
@@ -270,14 +348,25 @@ export default function App() {
             </div>
           </div>
 
-          <button onClick={() => { setGs({ ...INITIAL_STATE }); setGamePhase("intro"); }}
-            style={{
-              fontFamily: "'Press Start 2P'", fontSize: 8, padding: "12px 24px",
-              background: "linear-gradient(135deg, #185FA5, #0f3d6b)",
-              color: "white", border: "none", borderRadius: 8, cursor: "pointer", lineHeight: 1.6,
-            }}>
-            ↺ PLAY AGAIN
-          </button>
+          <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center" }}>
+            <button onClick={() => { setGs({ ...INITIAL_STATE }); setGamePhase("intro"); }}
+              style={{
+                fontFamily: "'Press Start 2P'", fontSize: 8, padding: "12px 24px",
+                background: "linear-gradient(135deg, #185FA5, #0f3d6b)",
+                color: "white", border: "none", borderRadius: 8, cursor: "pointer", lineHeight: 1.6,
+              }}>
+              ↺ PLAY AGAIN
+            </button>
+            {user && (
+              <button onClick={() => { logout(); setGamePhase("login"); }}
+                style={{
+                  fontFamily: "'Press Start 2P'", fontSize: 7, padding: "10px 20px",
+                  background: "#2a3a50", color: "#aaa", border: "none", borderRadius: 8, cursor: "pointer", lineHeight: 1.6,
+                }}>
+                🚪 LOGOUT
+              </button>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -367,5 +456,5 @@ export default function App() {
   }
 
   // ── MAIN GAME ────────────────────────────────────────────────────────────
-  return <GameScreen gs={gs} setGs={setGs} onEndGame={handleEndGame} playerName={playerName} />;
+  return <GameScreen gs={gs} setGs={setGs} onEndGame={handleEndGame} playerName={playerName} onSave={() => saveGame(gs)} onLogout={() => { saveGame(gs); logout(); setGamePhase("login"); }} />;
 }

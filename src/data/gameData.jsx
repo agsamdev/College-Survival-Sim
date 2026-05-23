@@ -574,8 +574,77 @@ export const LOCATION_ART = {
       <rect x="20" y="140" width="30" height="12" fill="#333" rx="1"/>
     </svg>
   ),
+  travel_baguio: (
+    <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <rect width="320" height="160" fill="#0a1a2e"/>
+      <rect y="120" width="320" height="40" fill="#1a3a1a"/>
+      <rect y="100" width="320" height="25" fill="#2a5a2a"/>
+      <rect y="90" width="320" height="15" fill="#3a7a3a"/>
+      <polygon points="0,120 60,30 120,120" fill="#2a3a5a"/>
+      <polygon points="80,120 160,20 240,120" fill="#1a2a4a"/>
+      <polygon points="180,120 260,40 320,120" fill="#2a3a5a"/>
+      <polygon points="40,120 100,50 160,120" fill="#3a4a6a" opacity="0.6"/>
+      <polygon points="140,120 210,35 280,120" fill="#3a4a6a" opacity="0.5"/>
+      <polygon points="150,28 160,20 170,28" fill="white" opacity="0.4"/>
+      <polygon points="55,38 60,30 65,38" fill="white" opacity="0.3"/>
+      <polygon points="245,48 260,40 275,48" fill="white" opacity="0.3"/>
+      {[[30,105],[50,100],[90,110],[110,105],[200,108],[230,100],[270,105],[290,110]].map(([x,y],i)=>(
+        <g key={i}>
+          <rect x={x-2} y={y} width={4} height={12} fill="#2a1a08"/>
+          <polygon points={`${x-8},${y} ${x},${y-16} ${x+8},${y}`} fill="#1a5a1a"/>
+          <polygon points={`${x-6},${y-6} ${x},${y-20} ${x+6},${y-6}`} fill="#2a7a2a"/>
+        </g>
+      ))}
+      <ellipse cx="80" cy="25" rx="25" ry="6" fill="white" opacity="0.1"/>
+      <ellipse cx="240" cy="20" rx="20" ry="5" fill="white" opacity="0.08"/>
+      <rect x="0" y="140" width="320" height="20" fill="#333"/>
+      <rect x="0" y="148" width="320" height="4" fill="#FFD700" opacity="0.3"/>
+      <rect x="20" y="100" width="50" height="18" fill="#185FA5" rx="2"/>
+      <text x="25" y="113" fill="white" fontSize="8" fontFamily="monospace">BAGUIO</text>
+      <text x="280" y="112" fill="#4a9a4a" fontSize="10">🌲</text>
+      <text x="10" y="112" fill="#4a9a4a" fontSize="10">🌲</text>
+    </svg>
+  ),
+  travel_beach: (
+    <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <rect width="320" height="160" fill="#0a1a2e"/>
+      <rect width="320" height="80" fill="#0a2a4e"/>
+      <rect width="320" height="60" fill="#1a4a7e" opacity="0.3"/>
+      <circle cx="270" cy="30" r="20" fill="#FFD700" opacity="0.6"/>
+      <circle cx="270" cy="30" r="16" fill="#FFD700" opacity="0.8"/>
+      <circle cx="270" cy="30" r="12" fill="#FFD700"/>
+      {[0,45,90,135,180,225,270,315].map((a,i)=>(
+        <line key={i} x1={270+Math.cos(a*Math.PI/180)*14} y1={30+Math.sin(a*Math.PI/180)*14}
+              x2={270+Math.cos(a*Math.PI/180)*22} y2={30+Math.sin(a*Math.PI/180)*22}
+              stroke="#FFD700" strokeWidth="2" opacity="0.3"/>
+      ))}
+      <ellipse cx="60" cy="25" rx="22" ry="6" fill="white" opacity="0.15"/>
+      <ellipse cx="180" cy="18" rx="18" ry="5" fill="white" opacity="0.1"/>
+      <rect x="0" y="75" width="320" height="35" fill="#1a6a9a"/>
+      <rect x="0" y="78" width="320" height="3" fill="#2a8aba" opacity="0.5"/>
+      {[0,40,80,120,160,200,240,280].map((x,i)=>(
+        <ellipse key={i} cx={x+20} cy={85+Math.sin(i)*3} rx="15" ry="2" fill="white" opacity="0.1"/>
+      ))}
+      <rect x="0" y="105" width="320" height="15" fill="#d4a040"/>
+      <rect x="0" y="105" width="320" height="3" fill="#e8b850"/>
+      {[10,35,60,90,115,145,170,200,225,255,280,310].map((x,i)=>(
+        <circle key={i} cx={x} cy={110+Math.sin(i*2)*3} r="1" fill="#c09030" opacity="0.5"/>
+      ))}
+      <rect x="45" y="95" width="4" height="20" fill="#5a3010"/>
+      <text x="28" y="96" fill="#2a7a2a" fontSize="16">🌴</text>
+      <text x="250" y="98" fill="#2a7a2a" fontSize="14">🌴</text>
+      <rect x="148" y="100" width="3" height="15" fill="#8a6030"/>
+      <polygon points="130,100 150,82 170,100" fill="#E24B4A"/>
+      <polygon points="135,100 150,88 165,100" fill="white" opacity="0.3"/>
+      <rect x="140" y="112" width="18" height="4" fill="#63a4ff" rx="1"/>
+      <text x="280" y="115" fontSize="8">⭐</text>
+      <rect x="20" y="75" width="50" height="16" fill="#D85A30" rx="2"/>
+      <text x="25" y="87" fill="white" fontSize="7" fontFamily="monospace">BEACH</text>
+      <text x="100" y="40" fill="#888" fontSize="6">~</text>
+      <text x="108" y="38" fill="#888" fontSize="6">~</text>
+    </svg>
+  ),
 };
-
 export function clamp(v, min = 0, max = 100) {
   return Math.max(min, Math.min(max, v));
 }

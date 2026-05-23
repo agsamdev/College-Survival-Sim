@@ -18,6 +18,15 @@ const SUBJECT_TEACHER_NOTES = {
   design: "Architecture is the thoughtful making of spaces.",
   building_tech: "A building stands on physics and falls on oversight.",
   arch_history: "We build on the shoulders of those who built before us.",
+  abnormal_psych: "The abnormal illuminates what 'normal' truly means.",
+  developmental_psych: "We grow in stages — each crisis is an opportunity.",
+  industrial_psych: "People are an organization's most valuable asset.",
+  pharm_chem: "Drugs are molecules designed to fit biological locks.",
+  clinical_pharm: "The right drug, right dose, right patient, right time.",
+  pharmacognosy: "Nature has been compounding medicines for millennia.",
+  radiologic_physics: "Invisible rays reveal the hidden architecture of the body.",
+  imaging_procedures: "Positioning is an art — anatomy is the canvas.",
+  radiation_biology: "Respect the dose. It heals and it harms.",
 };
 
 export default function StudyScreen({ majorId, dayIndex, slotIndex, gs, onStudy, onBack }) {

@@ -345,26 +345,90 @@ export default function Basketball({ onFinish }) {
     );
   }
 
+  const sendKey = (key, type = "keydown") => {
+    window.dispatchEvent(new KeyboardEvent(type, { key, bubbles: true }));
+  };
+  const onTouchStart = (key) => { sendKey(key, "keydown"); };
+  const onTouchEnd = (key) => { sendKey(key, "keyup"); };
+
   return (
     <div style={{
-      fontFamily: "'Nunito',sans-serif", minHeight: "100vh", background: "#0d1117",
-      display: "flex", flexDirection: "column", alignItems: "center", padding: "0.5rem",
+      fontFamily: "'Nunito',sans-serif", minHeight: "100dvh", background: "#0d1117",
+      display: "flex", flexDirection: "column", alignItems: "center",
+      padding: "0.5rem", paddingBottom: "env(safe-area-inset-bottom, 8px)",
+      overflow: "hidden",
     }}>
-      <div style={{ maxWidth: 620, width: "100%" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-          <div style={{ fontFamily: "'Press Start 2P'", fontSize: 10, color: "#e8a020", lineHeight: 1.8 }}>
-            🏀 BASKETBALL
+      <div style={{ maxWidth: 620, width: "100%", display: "flex", flexDirection: "column", flex: 1, maxHeight: "100dvh" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6, flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <button onClick={() => onFinish({ score: 0, shots: 0, rewards: { focus: 0, stamina: 0, social: 0, stress: 0 } })}
+              style={{
+                fontFamily: "'Press Start 2P'", fontSize: 5, padding: "6px 10px",
+                background: "#2a3a50", color: "#aaa", border: "none", borderRadius: 6,
+                cursor: "pointer", lineHeight: 1.6, minHeight: 32,
+              }}>
+              ◀ QUIT
+            </button>
+            <div style={{ fontFamily: "'Press Start 2P'", fontSize: 8, color: "#e8a020", lineHeight: 1.8 }}>
+              🏀 BASKETBALL
+            </div>
           </div>
-          <div style={{ fontFamily: "'VT323'", fontSize: 24, color: "#97C459" }}>
+          <div style={{ fontFamily: "'VT323'", fontSize: 22, color: "#97C459" }}>
             Score: {score}
           </div>
         </div>
         <div style={{
           background: "#111", borderRadius: 10, overflow: "hidden",
-          border: "2px solid #2a3a50", position: "relative",
+          border: "2px solid #2a3a50", position: "relative", flex: 1,
         }}>
           <canvas ref={canvasRef} width={COURT_W} height={COURT_H}
-            style={{ width: "100%", height: "auto", display: "block" }} />
+            style={{ width: "100%", height: "100%", display: "block", objectFit: "contain" }} />
+        </div>
+
+        {/* Touch controls */}
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          marginTop: 6, gap: 8, flexShrink: 0, paddingBottom: 4,
+        }}>
+          <div style={{ display: "flex", gap: 6 }}>
+            {["ArrowLeft", "ArrowRight", "ArrowUp"].map(key => (
+              <button key={key}
+                onTouchStart={(e) => { e.preventDefault(); onTouchStart(key); }}
+                onTouchEnd={(e) => { e.preventDefault(); onTouchEnd(key); }}
+                onMouseDown={() => onTouchStart(key)}
+                onMouseUp={() => onTouchEnd(key)}
+                onMouseLeave={() => onTouchEnd(key)}
+                className="touch-btn"
+                style={{
+                  width: 56, height: 56, borderRadius: 12, border: "2px solid #2a3a50",
+                  background: "#1a2236", color: "#e8e8e8", fontSize: 22, cursor: "pointer",
+                  WebkitUserSelect: "none", userSelect: "none", touchAction: "none",
+                }}>
+                {key === "ArrowLeft" ? "◀" : key === "ArrowRight" ? "▶" : "▲"}
+              </button>
+            ))}
+          </div>
+          <button
+            onTouchStart={(e) => { e.preventDefault(); onTouchStart(" "); }}
+            onTouchEnd={(e) => { e.preventDefault(); onTouchEnd(" "); }}
+            onMouseDown={() => onTouchStart(" ")}
+            onMouseUp={() => onTouchEnd(" ")}
+            onMouseLeave={() => onTouchEnd(" ")}
+            className="touch-btn"
+            style={{
+              width: 72, height: 56, borderRadius: 12, border: "2px solid #e8a020",
+              background: "#e8a02020", color: "#e8a020", fontSize: 11,
+              fontFamily: "'Press Start 2P'", cursor: "pointer",
+              WebkitUserSelect: "none", userSelect: "none", touchAction: "none",
+            }}>
+            🏀 SHOOT
+          </button>
+        </div>
+        <div style={{
+          textAlign: "center", fontFamily: "'VT323'", fontSize: 12, color: "#555",
+          flexShrink: 0, lineHeight: 1.5,
+        }}>
+          ← → move &nbsp;|&nbsp; ▲ jump &nbsp;|&nbsp; SHOOT
         </div>
       </div>
     </div>

@@ -252,10 +252,160 @@
       },
     ],
   },
+  psychology: {
+    id: "psychology", name: "Psychology", icon: "🧠", color: "#9B59B6",
+    description: "Study human behavior, cognitive processes, mental health, and research methods.",
+    teachers: [
+      { id: "prof_dimaano", name: "Prof. Dimaano", color: "#8E44AD", specialty: "Clinical Psychology" },
+      { id: "prof_salazar", name: "Prof. Salazar", color: "#534AB7", specialty: "Developmental Psych" },
+      { id: "prof_villar", name: "Prof. Villar", color: "#D85A30", specialty: "Industrial-Organizational Psych" },
+    ],
+    subjects: [
+      {
+        id: "abnormal_psych", name: "Abnormal Psychology", icon: "🧩", teacher: "prof_dimaano",
+        lessons: [
+          { id: "abpsy1", title: "Anxiety Disorders", concept: "GAD, panic disorder, phobias — excessive fear responses that impair daily functioning." },
+          { id: "abpsy2", title: "Mood Disorders", concept: "Major depressive disorder and bipolar disorder — disturbances in emotion regulation." },
+          { id: "abpsy3", title: "Personality Disorders", concept: "Cluster A, B, C — enduring maladaptive patterns of behavior and cognition." },
+          { id: "abpsy4", title: "Schizophrenia Spectrum", concept: "Positive and negative symptoms — hallucinations, delusions, avolition." },
+          { id: "abpsy5", title: "Trauma & Stress Disorders", concept: "PTSD and acute stress disorder — re-experiencing, avoidance, hyperarousal." },
+          { id: "abpsy6", title: "Eating & Sleep Disorders", concept: "Anorexia, bulimia, insomnia — biopsychosocial factors in dysregulation." },
+          { id: "abpsy7", title: "Substance Use Disorders", concept: "Addiction as a brain disease — tolerance, withdrawal, and craving cycles." },
+          { id: "abpsy8", title: "Neurodevelopmental Disorders", concept: "ASD and ADHD — early-onset conditions affecting cognition and behavior." },
+        ],
+      },
+      {
+        id: "developmental_psych", name: "Developmental Psychology", icon: "🌱", teacher: "prof_salazar",
+        lessons: [
+          { id: "devpsy1", title: "Piaget's Cognitive Development", concept: "Sensorimotor to formal operational — children construct understanding through stages." },
+          { id: "devpsy2", title: "Erikson's Psychosocial Stages", concept: "Trust vs mistrust to integrity vs despair — eight crises across the lifespan." },
+          { id: "devpsy3", title: "Attachment Theory", concept: "Secure, avoidant, ambivalent — Bowlby and Ainsworth on early bonding." },
+          { id: "devpsy4", title: "Adolescent Development", concept: "Identity formation, peer influence, and prefrontal cortex maturation." },
+          { id: "devpsy5", title: "Moral Development", concept: "Kohlberg's stages — pre-conventional to post-conventional moral reasoning." },
+          { id: "devpsy6", title: "Aging & Gerontology", concept: "Cognitive decline, wisdom, and socioemotional selectivity in late adulthood." },
+          { id: "devpsy7", title: "Language Acquisition", concept: "Chomsky's LAD vs Vygotsky's social interaction — nature and nurture in language." },
+          { id: "devpsy8", title: "Cross-Cultural Development", concept: "Individualistic vs collectivist cultures shape self-concept and parenting." },
+        ],
+      },
+      {
+        id: "industrial_psych", name: "Industrial-Organizational Psych", icon: "💼", teacher: "prof_villar",
+        lessons: [
+          { id: "io1", title: "Personnel Selection & Assessment", concept: "Validity and reliability of employment tests — predicting job performance." },
+          { id: "io2", title: "Training & Development", concept: "Needs analysis, transfer of training, and Kirkpatrick's evaluation model." },
+          { id: "io3", title: "Motivation & Job Satisfaction", concept: "Herzberg's two-factor theory — hygiene factors vs motivators." },
+          { id: "io4", title: "Leadership & Management", concept: "Transformational, transactional, and laissez-faire leadership styles." },
+          { id: "io5", title: "Organizational Culture", concept: "Schein's three levels: artifacts, espoused values, basic assumptions." },
+          { id: "io6", title: "Workplace Stress & Burnout", concept: "Job demands-resources model — preventing occupational burnout." },
+          { id: "io7", title: "Team Dynamics & Collaboration", concept: "Tuckman's stages: forming, storming, norming, performing, adjourning." },
+          { id: "io8", title: "Consumer Psychology", concept: "Decision-making heuristics, persuasion, and the psychology of advertising." },
+        ],
+      },
+    ],
+  },
+  pharmacy: {
+    id: "pharmacy", name: "Pharmacy", icon: "💊", color: "#1ABC9C",
+    description: "Study pharmaceutical chemistry, pharmacology, pharmacognosy, and clinical pharmacy.",
+    teachers: [
+      { id: "prof_castillo", name: "Dean Castillo", color: "#16A085", specialty: "Pharmaceutical Chemistry" },
+      { id: "prof_martinez", name: "Prof. Martinez", color: "#185FA5", specialty: "Clinical Pharmacy" },
+      { id: "prof_delacruz_ph", name: "Prof. Dela Cruz", color: "#D85A30", specialty: "Pharmacognosy" },
+    ],
+    subjects: [
+      {
+        id: "pharm_chem", name: "Pharmaceutical Chemistry", icon: "⚗️", teacher: "prof_castillo",
+        lessons: [
+          { id: "pc1", title: "Organic Chemistry Fundamentals", concept: "Functional groups, stereochemistry, and reaction mechanisms in drug molecules." },
+          { id: "pc2", title: "Drug Design & Discovery", concept: "Structure-activity relationships (SAR) — optimizing lead compounds for efficacy." },
+          { id: "pc3", title: "Medicinal Chemistry of NSAIDs", concept: "COX-1 vs COX-2 inhibition — balancing anti-inflammatory effects with GI safety." },
+          { id: "pc4", title: "Antibiotic Chemistry", concept: "Beta-lactams, macrolides, fluoroquinolones — mechanisms of bacterial cell wall disruption." },
+          { id: "pc5", title: "Anticancer Agents", concept: "Alkylating agents, antimetabolites, and targeted therapies in oncology." },
+          { id: "pc6", title: "Cardiovascular Drug Chemistry", concept: "ACE inhibitors, beta-blockers, statins — molecular mechanisms of action." },
+          { id: "pc7", title: "Analytical Methods in Pharmacy", concept: "HPLC, mass spectrometry, and spectroscopy for drug quality control." },
+          { id: "pc8", title: "Biopharmaceuticals & Biosimilars", concept: "Monoclonal antibodies, recombinant proteins, and regulatory pathways." },
+        ],
+      },
+      {
+        id: "clinical_pharm", name: "Clinical Pharmacy", icon: "🏥", teacher: "prof_martinez",
+        lessons: [
+          { id: "cp1", title: "Pharmacokinetics & Pharmacodynamics", concept: "ADME — how the body affects drugs and drugs affect the body." },
+          { id: "cp2", title: "Drug Interactions & Adverse Effects", concept: "Cytochrome P450 system — predicting and preventing harmful interactions." },
+          { id: "cp3", title: "Therapeutic Drug Monitoring", concept: "Trough and peak levels — individualizing dosing for narrow therapeutic index drugs." },
+          { id: "cp4", title: "Clinical Toxicology", concept: "Antidotes, activated charcoal, and management of acute poisonings." },
+          { id: "cp5", title: "Pediatric & Geriatric Pharmacotherapy", concept: "Age-related changes in absorption, distribution, metabolism, and excretion." },
+          { id: "cp6", title: "Pharmacy Practice & Ethics", concept: "Patient counseling, medication therapy management, and pharmaceutical care." },
+          { id: "cp7", title: "Hospital Pharmacy Management", concept: "Inventory control, sterile compounding, and formulary management." },
+          { id: "cp8", title: "Pharmacoeconomics", concept: "Cost-effectiveness analysis — balancing clinical outcomes with healthcare costs." },
+        ],
+      },
+      {
+        id: "pharmacognosy", name: "Pharmacognosy & Herbal Meds", icon: "🌿", teacher: "prof_delacruz_ph",
+        lessons: [
+          { id: "phcg1", title: "Plant-Based Drug Sources", concept: "Morphine from opium, quinine from cinchona — nature as a pharmacy." },
+          { id: "phcg2", title: "Alkaloids & Terpenoids", concept: "Nitrogen-containing plant compounds with potent pharmacological activity." },
+          { id: "phcg3", title: "Flavonoids & Polyphenols", concept: "Antioxidant properties and cardiovascular benefits of plant pigments." },
+          { id: "phcg4", title: "Herbal Medicine in the Philippines", concept: "Lagundi, sambong, tawa-tawa — DOH-approved herbal preparations." },
+          { id: "phcg5", title: "Essential Oils & Aromatherapy", concept: "Volatile plant compounds — extraction methods and therapeutic uses." },
+          { id: "phcg6", title: "Marine Pharmacognosy", concept: "Bioactive compounds from sponges, corals, and marine microorganisms." },
+          { id: "phcg7", title: "Quality Control of Herbal Products", concept: "Standardization, adulteration detection, and heavy metal testing." },
+          { id: "phcg8", title: "Ethnopharmacology", concept: "Traditional knowledge systems and the scientific validation of folk medicines." },
+        ],
+      },
+    ],
+  },
+  radtech: {
+    id: "radtech", name: "Radiologic Technology", icon: "🩻", color: "#3498DB",
+    description: "Study medical imaging, radiation physics, anatomy, and patient care in radiology.",
+    teachers: [
+      { id: "prof_mercado", name: "Prof. Mercado", color: "#2980B9", specialty: "Radiologic Physics" },
+      { id: "prof_fernandez", name: "Prof. Fernandez", color: "#534AB7", specialty: "Imaging Procedures" },
+      { id: "prof_santos_rt", name: "Prof. Santos", color: "#D85A30", specialty: "Radiation Biology & Protection" },
+    ],
+    subjects: [
+      {
+        id: "radiologic_physics", name: "Radiologic Physics & Equipment", icon: "⚛️", teacher: "prof_mercado",
+        lessons: [
+          { id: "rp1", title: "X-Ray Production & Emission", concept: "Bremsstrahlung and characteristic radiation — the X-ray tube and its components." },
+          { id: "rp2", title: "Radiation Interactions with Matter", concept: "Photoelectric effect, Compton scattering, and pair production in tissue." },
+          { id: "rp3", title: "Image Formation & Quality", concept: "Density, contrast, resolution, and noise — balancing diagnostic quality with dose." },
+          { id: "rp4", title: "Digital Radiography Systems", concept: "Flat panel detectors, CR, and DR — transitioning from film to digital." },
+          { id: "rp5", title: "Computed Tomography Physics", concept: "Hounsfield units, helical scanning, and iterative reconstruction algorithms." },
+          { id: "rp6", title: "Magnetic Resonance Imaging", concept: "Nuclear magnetic resonance, T1/T2 relaxation, and gradient echo sequences." },
+          { id: "rp7", title: "Ultrasound Physics", concept: "Piezoelectric crystals, acoustic impedance, and Doppler effect in medical imaging." },
+          { id: "rp8", title: "Nuclear Medicine & PET/CT", concept: "Radioisotopes, gamma cameras, and FDG uptake in metabolic imaging." },
+        ],
+      },
+      {
+        id: "imaging_procedures", name: "Imaging Procedures & Positioning", icon: "🦴", teacher: "prof_fernandez",
+        lessons: [
+          { id: "ip1", title: "Chest & Thoracic Imaging", concept: "PA, lateral, and AP projections — evaluating lungs, heart, and mediastinum." },
+          { id: "ip2", title: "Upper Extremity Radiography", concept: "Hand, wrist, forearm, elbow, humerus — standard positioning and trauma series." },
+          { id: "ip3", title: "Lower Extremity Radiography", concept: "Foot, ankle, tib/fib, knee, femur — weight-bearing vs non-weight-bearing views." },
+          { id: "ip4", title: "Spine & Pelvis Imaging", concept: "Cervical, thoracic, lumbar spine — AP, lateral, oblique, and special views." },
+          { id: "ip5", title: "Abdominal & GI Studies", concept: "KUB, barium swallow, upper GI series, and barium enema procedures." },
+          { id: "ip6", title: "Contrast Media in Imaging", concept: "Iodinated contrast, adverse reactions, and premedication protocols." },
+          { id: "ip7", title: "CT & MRI Protocols", concept: "Contrast timing, slice thickness, and sequence selection for specific anatomy." },
+          { id: "ip8", title: "Mammography & Bone Densitometry", concept: "Craniocaudal and mediolateral oblique views — breast cancer screening." },
+        ],
+      },
+      {
+        id: "radiation_biology", name: "Radiation Biology & Protection", icon: "☢️", teacher: "prof_santos_rt",
+        lessons: [
+          { id: "rb1", title: "Biological Effects of Radiation", concept: "Direct vs indirect DNA damage — free radicals and cellular repair mechanisms." },
+          { id: "rb2", title: "Stochastic vs Deterministic Effects", concept: "Cancer risk vs tissue reactions — linear no-threshold model." },
+          { id: "rb3", title: "ALARA Principle", concept: "As Low As Reasonably Achievable — time, distance, and shielding." },
+          { id: "rb4", title: "Radiation Dosimetry", concept: "Absorbed dose, equivalent dose, effective dose — Gy, Sv, and rem units." },
+          { id: "rb5", title: "Patient Dose Management", concept: "Diagnostic reference levels and pediatric dose reduction strategies." },
+          { id: "rb6", title: "Occupational Exposure Monitoring", concept: "Film badges, TLDs, OSL dosimeters — monthly dose reporting." },
+          { id: "rb7", title: "Regulatory Standards in the Philippines", concept: "PNRI regulations, Code of Practice, and licensing requirements." },
+          { id: "rb8", title: "Emergency Response in Radiology", concept: "Contamination control, decontamination procedures, and incident reporting." },
+        ],
+      },
+    ],
+  },
 };
 
 export const DEFAULT_SCHEDULE = {};
-["computer_science", "engineering", "business", "nursing", "architecture"].forEach(mid => {
+["computer_science", "engineering", "business", "nursing", "architecture", "psychology", "pharmacy", "radtech"].forEach(mid => {
   const subjects = MAJORS[mid].subjects;
   const schedule = {};
   ["MON","TUE","WED","THU","FRI"].forEach((day, di) => {

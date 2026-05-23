@@ -18,6 +18,7 @@ import Chess from "./minigames/Chess";
 import F1Racing from "./minigames/F1Racing";
 import StudyScreen from "./StudyScreen";
 import NetflixScreen from "./NetflixScreen";
+import MusicPlayer from "./MusicPlayer";
 import { MAJORS } from "../data/majors";
 
 const CONTEXT_TIPS = {
@@ -29,7 +30,7 @@ const CONTEXT_TIPS = {
   f1: ["F1 Racing builds social + focus.","Use Arrow Keys to drive.","Complete 3 laps to finish!","Watch out for the walls!"],
 };
 
-export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEndGame, playerName }) {
+export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEndGame, playerName, onSave, onLogout }) {
   const [gs, setGsLocal] = useState(externalGs);
   const [mapLocation, setMapLocation] = useState("dormitory");
   const [activeEvent, setActiveEvent] = useState(null);
@@ -44,7 +45,8 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
   const [showStudy, setShowStudy] = useState(false);
   const [studyMode, setStudyMode] = useState(null); // "study" or "attend_class"
   const [showNetflix, setShowNetflix] = useState(false);
-  const [showTravel, setShowTravel] = useState(false);
+  const [showTravel, setShowTravel] = useState(null);
+  const [showMusicPlayer, setShowMusicPlayer] = useState(false);
   const [tipIndex, setTipIndex] = useState(0);
 
   // Sync external state
@@ -228,6 +230,9 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
         next = applyEffects(next, action.reward || {});
         addLog(`[${getDayName(prev.day)} ${TIME_SLOTS[prev.slot]}] ${action.label}`);
         pushNotif(`✈ ${action.label} — Stress reduced!`, "#63a4ff");
+        const destId = actionId === "travel_baguio" ? "travel_baguio" : "travel_beach";
+        setShowTravel({ dest: destId, label: action.label });
+        setTimeout(() => setShowTravel(null), 4000);
         return advanceTime(next);
       }
 
@@ -582,11 +587,34 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
   }
 
   // Main game screen
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+
   return (
     <div style={{
-      fontFamily: "'Nunito',sans-serif", background: "#0d1117", minHeight: "100vh",
-      padding: "0.6rem", color: "#e8e8e8",
+      fontFamily: "'Nunito',sans-serif", background: "#0d1117", minHeight: "100dvh",
+      padding: isMobile ? "0.4rem" : "0.6rem", color: "#e8e8e8",
+      overflowY: "auto", overflowX: "hidden",
     }}>
+      <style>{`
+        @media (max-width: 640px) {
+          .gs-stats-grid { grid-template-columns: 1fr !important; }
+          .gs-split-grid { grid-template-columns: 1fr !important; }
+          .gs-header-title { font-size: 5px !important; }
+          .gs-header-sub { font-size: 13px !important; }
+          .gs-location-view { height: 120px !important; }
+          .gs-records { flex-wrap: wrap !important; gap: 0.5rem !important; }
+          .gs-action-btn { padding: 10px 8px !important; }
+          .gs-map-btns { gap: 3px !important; }
+          .gs-map-btn { font-size: 12px !important; padding: 5px !important; }
+          .gs-log { max-height: 70px !important; }
+        }
+        @media (max-width: 400px) {
+          .gs-stats-grid { grid-template-columns: 1fr !important; }
+          .gs-split-grid { grid-template-columns: 1fr !important; }
+          .gs-location-view { height: 100px !important; }
+          .gs-header-avatar { display: none !important; }
+        }
+      `}</style>
       {battleFlash &&
         <BattleFlash onDone={() => { setBattleFlash(false); setActiveEvent(pendingEvent); setPendingEvent(null); }} />
       }
@@ -625,16 +653,49 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
             </div>
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontFamily: "'Press Start 2P'", fontSize: 7, color: "#97C459", lineHeight: 1.8 }}>
+            <div className="gs-header-title" style={{ fontFamily: "'Press Start 2P'", fontSize: 7, color: "#97C459", lineHeight: 1.8 }}>
               COLLEGE SURVIVAL SIM
             </div>
-            <div style={{ fontFamily: "'VT323'", fontSize: 17, color: "#888" }}>
+            <div className="gs-header-sub" style={{ fontFamily: "'VT323'", fontSize: 17, color: "#888" }}>
               {playerName && <span style={{ color: "#63a4ff", marginRight: 8 }}>{playerName}</span>}
               Wk{week}/{4} · {dayName} · {currentSlot}
               {week >= 4 && <span style={{ color: "#E24B4A", marginLeft: 6 }}>★ EXAM WEEK</span>}
             </div>
           </div>
-          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
+            <button onClick={() => setShowMusicPlayer(!showMusicPlayer)}
+              style={{
+                background: showMusicPlayer ? "#1DB954" : "#1a2236",
+                border: `1px solid ${showMusicPlayer ? "#1DB954" : "#2a3a50"}`,
+                borderRadius: 6, padding: "4px 8px", cursor: "pointer",
+                color: showMusicPlayer ? "white" : "#888",
+                fontFamily: "'Press Start 2P'", fontSize: 5, lineHeight: 1.6,
+                transition: "all 0.15s",
+              }}>
+              🎵
+            </button>
+            <button onClick={onSave}
+              style={{
+                background: "#1a2236", border: "1px solid #2a3a50", borderRadius: 6,
+                padding: "4px 8px", cursor: "pointer", color: "#97C459",
+                fontFamily: "'Press Start 2P'", fontSize: 5, lineHeight: 1.6,
+                transition: "all 0.15s",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "#97C459"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "#2a3a50"; }}>
+              💾 SAVE
+            </button>
+            <button onClick={onLogout}
+              style={{
+                background: "#1a2236", border: "1px solid #E24B4A40", borderRadius: 6,
+                padding: "4px 8px", cursor: "pointer", color: "#E24B4A",
+                fontFamily: "'Press Start 2P'", fontSize: 5, lineHeight: 1.6,
+                transition: "all 0.15s",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "#E24B4A"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "#E24B4A40"; }}>
+              🚪
+            </button>
             <div style={{ fontFamily: "'VT323'", fontSize: 24, color: "#97C459", fontWeight: 700 }}>₱{gs.php}</div>
             <div style={{
               background: grade.c, borderRadius: 6, padding: "3px 10px",
@@ -650,7 +711,7 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
           background: "#1a2236", borderRadius: 10, padding: "0.75rem 1rem",
           marginBottom: "0.6rem", border: "1px solid #2a3a50",
         }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 1.5rem" }}>
+          <div className="gs-stats-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 1.5rem" }}>
             <div>
               <StatBar label="FOCUS" value={gs.focus} color="#378ADD" icon="⚡" />
               <StatBar label="STAMINA" value={gs.stamina} color="#97C459" icon="💪" />
@@ -687,7 +748,7 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
         />
 
         {/* ── CENTRAL LOCATION VIEWPORT ── */}
-        <div style={{
+        <div className="gs-location-view" style={{
           background: "#111", borderRadius: 10, overflow: "hidden",
           border: "2px solid #2a3a50", marginBottom: "0.6rem", position: "relative", height: 160,
         }}>
@@ -705,10 +766,34 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
             </div>
             <div style={{ fontFamily: "'VT323'", fontSize: 14, color: "#888" }}>{dayName} {currentSlot}</div>
           </div>
+
+          {/* Travel scenery overlay */}
+          {showTravel && (
+            <div style={{
+              position: "absolute", inset: 0, zIndex: 10,
+              animation: "fadeIn 0.3s ease-out",
+            }}>
+              {LOCATION_ART[showTravel.dest]}
+              <div style={{
+                position: "absolute", top: 8, left: "50%", transform: "translateX(-50%)",
+                background: "rgba(0,0,0,0.7)", padding: "4px 14px", borderRadius: 8,
+                fontFamily: "'Press Start 2P'", fontSize: 7, color: "#63a4ff",
+                lineHeight: 1.8, whiteSpace: "nowrap",
+              }}>
+                ✈ {showTravel.label.toUpperCase()}
+              </div>
+              <div style={{
+                position: "absolute", bottom: 8, left: "50%", transform: "translateX(-50%)",
+                fontFamily: "'VT323'", fontSize: 14, color: "#888",
+              }}>
+                🧘 Stress reduced!
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ── SPLIT: NPC DIALOGUE + ACTIONS ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem", marginBottom: "0.6rem" }}>
+        <div className="gs-split-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem", marginBottom: "0.6rem" }}>
 
           {/* NPC + Map */}
           <div style={{
@@ -740,9 +825,10 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
               <div style={{ fontFamily: "'Press Start 2P'", fontSize: 6, color: "#555", marginBottom: 5, lineHeight: 1.7 }}>
                 📍 MOVE TO:
               </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+              <div className="gs-map-btns" style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
                 {MAP_LOCATIONS.map(loc => (
                   <button key={loc.id} onClick={() => setMapLocation(loc.id)}
+                    className="gs-map-btn"
                     style={{
                       fontFamily: "'VT323'", fontSize: 14, padding: "3px 7px",
                       background: mapLocation === loc.id ? loc.color : "#111827",
@@ -771,6 +857,7 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
             <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
               {availableActions.map(([id, action]) => (
                 <button key={id} onClick={() => doAction(id)}
+                  className="gs-action-btn"
                   style={{
                     background: "#111827", border: "1px solid #2a3a50", borderRadius: 7,
                     padding: "5px 8px", cursor: "pointer", textAlign: "left",
@@ -798,7 +885,7 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
 
         {/* ── MINIGAME STATS ── */}
         {gs.minigameStats && (
-          <div style={{
+          <div className="gs-records" style={{
             background: "#1a2236", borderRadius: 10, padding: "0.5rem 0.75rem",
             border: "1px solid #2a3a50", marginBottom: "0.6rem",
             display: "flex", gap: "1rem", alignItems: "center",
@@ -814,7 +901,7 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
         )}
 
         {/* ── ACTIVITY LOG ── */}
-        <div style={{
+        <div className="gs-log" style={{
           background: "#1a2236", borderRadius: 10, padding: "0.5rem 0.75rem",
           border: "1px solid #2a3a50", maxHeight: 90, overflowY: "auto",
         }}>
@@ -837,6 +924,11 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
         <div style={{ marginTop: "0.5rem", fontFamily: "'VT323'", fontSize: 14, color: "#444", textAlign: "center" }}>
           TIP: {CONTEXT_TIPS.default[gs.day % 12]}
         </div>
+
+        {/* Music Player */}
+        {showMusicPlayer && (
+          <MusicPlayer onClose={() => setShowMusicPlayer(false)} />
+        )}
       </div>
     </div>
   );
