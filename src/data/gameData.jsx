@@ -27,7 +27,7 @@ export const INITIAL_STATE = {
 };
 
 export const LOCATION_NPC = {
-  canteen:   { id:"ella jabonero",   name:"Ella Jabonero", age:20, location:"Davao", color:"#D85A30", romanceable:true, lines:[
+  canteen:   { id:"rosa_cortez",   name:"Rosa Cortez", age:20, location:"Davao", color:"#D85A30", romanceable:true, lines:[
     "Ay sus, kapoy ka na gyud? Tarongon nato ang baon nimo.",
     "Naay bagong sinuglaw diri, extra sabaw pa gyud.",
     "Energy kaayo ka daw, tara. Ako jud hilig og F1, perting paspas.",
