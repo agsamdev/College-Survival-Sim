@@ -1,5 +1,3 @@
-Here's a comprehensive README content draft for your project based on the codebase and gaps identified. This README covers the main purpose, features, installation, usage, project structure, and contribution guidelines, addressing all missing documentation gaps.
-
 ---
 
 # College Survival Sim 2.0 Edition
