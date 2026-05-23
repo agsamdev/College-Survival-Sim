@@ -27,16 +27,16 @@ export const INITIAL_STATE = {
 };
 
 export const LOCATION_NPC = {
-  canteen:   { id:"ate_nena",   name:"Ate Nena",    color:"#D85A30", romanceable:true, lines:[
-    "Uy, customerrr! Anong gusto mo ngayon, anak?",
-    "Libre pa naman ang ngiti dito ha! Siomai rice ka na lang!",
-    "Ikaw ba yung nag-apply dati? O sige, mag-part-time ka na!",
-    "Late ka na naman ba sa lecture mo? Kain muna bago sumabak!",
+  canteen:   { id:"ella jabonero",   name:"Ella Jabonero", age:20, location:"Davao", color:"#D85A30", romanceable:true, lines:[
+    "Ay sus, kapoy ka na gyud? Tarongon nato ang baon nimo.",
+    "Naay bagong sinuglaw diri, extra sabaw pa gyud.",
+    "Energy kaayo ka daw, tara. Ako jud hilig og F1, perting paspas.",
+    "Akong iro mukuyog unya sa walk. Ganahan ka og iro, 'di ba?",
   ], romanceLines:{
-    flustered:"A-ano ba yan... napapangiti mo naman ako, e. Eto, extra rice, libre.",
-    friendly:"Uy, balik ka nang balik dito ah. Miss na miss mo ba ko o yung siomai?",
-    date:"Sige, pag natapos shift ko, tara. Daan tayo sa plaza, may bagong bukas na milk tea shop.",
-    gift:"Para sa'kin 'to? Hala... salamat, anak. Sige, sa susunod libre kita.",
+    flustered:"Hala, ngisi pa gyud na nimo. Ambot ana, mura kog naay laing race sa kasingkasing.",
+    friendly:"Balik na intawon diri, ha? Libre tika og taklob sa asadong baboy.",
+    date:"Human sa trabaho, drive ta sa Davao Crocodile Park. Dili lang ta mag-F1, mag-walk sad ta.",
+    gift:"Awww, para sa akong iro? Salamat kaayo. Pwede ka mo-join next walk.",
   }},
   bookstore: { id:"kuya_ben",   name:"Kuya Ben",    color:"#BA7517", romanceable:false, lines:[
     "Welcome to the bookstore! Need a bluebook for the exam?",
