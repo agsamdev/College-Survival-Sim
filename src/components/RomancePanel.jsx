@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { LOCATION_NPC, ROMANCE_STAGES, ROMANCE_THRESHOLDS, ROMANCE_STAGE_COLORS } from "../data/gameData";
 import NpcAvatar from "./NpcAvatar";
 
-export default function RomancePanel({ romance, romanceableNpcs, onFlirt }) {
+export default function RomancePanel({ romance, romanceableNpcs, onFlirt, onTalk }) {
   const romData = useMemo(() => {
     if (!romance) return [];
     return Object.entries(romance)
@@ -77,7 +77,13 @@ export default function RomancePanel({ romance, romanceableNpcs, onFlirt }) {
                 </div>
               </div>
               {data.stage !== "love" && (
-                <button onClick={() => onFlirt(id)}
+                <button onClick={() => {
+                  if (data.stage === "stranger" && onTalk) {
+                    onTalk(id);
+                  } else if (onFlirt) {
+                    onFlirt(id);
+                  }
+                }}
                   style={{
                     width: "100%", marginTop: 6, fontFamily: "'Press Start 2P'", fontSize: 5,
                     padding: "5px 8px", background: stageColor + "20", color: stageColor,
@@ -86,7 +92,7 @@ export default function RomancePanel({ romance, romanceableNpcs, onFlirt }) {
                   }}
                   onMouseEnter={e => { e.currentTarget.style.background = stageColor + "40"; }}
                   onMouseLeave={e => { e.currentTarget.style.background = stageColor + "20"; }}>
-                  {data.stage === "stranger" ? "👋 Get to know" :
+                  {data.stage === "stranger" ? "💬 Talk" :
                    data.stage === "friendly" ? "💬 Hang out" :
                    data.stage === "flustered" ? "💕 Flirt" :
                    data.stage === "crush" ? "💝 Ask on date" :

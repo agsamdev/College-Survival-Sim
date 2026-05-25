@@ -3,7 +3,7 @@ import {
   TIME_SLOTS, TOTAL_DAYS, DAYS, INITIAL_STATE,
   LOCATION_NPC, LOCATION_ART, MAP_LOCATIONS,
   ACTIONS, CANTEEN_ITEMS, BOOKSTORE_ITEMS, WATSONS_ITEMS,
-  RANDOM_EVENTS, EXAM_EVENTS,
+  RANDOM_EVENTS, EXAM_EVENTS, NPC_CONVERSATIONS,
   clamp, applyEffects, getDayName, getGradeLetter, getRomanceStage, ROMANCE_STAGE_COLORS,
 } from "../data/gameData";
 import PlayerAvatar from "./PlayerAvatar";
@@ -12,6 +12,7 @@ import StatBar from "./StatBar";
 import DialogBox from "./DialogBox";
 import BattleFlash from "./BattleFlash";
 import RomancePanel from "./RomancePanel";
+import ConversationPanel from "./ConversationPanel";
 import Basketball from "./minigames/Basketball";
 import FpsRange from "./minigames/FpsRange";
 import Chess from "./minigames/Chess";
@@ -48,6 +49,7 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
   const [showTravel, setShowTravel] = useState(null);
   const [showMusicPlayer, setShowMusicPlayer] = useState(false);
   const [tipIndex, setTipIndex] = useState(0);
+  const [activeConversation, setActiveConversation] = useState(null); // { npcId, conversation }
 
   // Sync external state
   useEffect(() => { setGsLocal(externalGs); }, [externalGs]);
@@ -318,6 +320,69 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
     setActiveRomanceFlirt(null);
   }, [pushNotif, addLog, setGs, romanceableNpcs]);
 
+  const handleTalk = useCallback((npcId) => {
+    const romance = gs.romance?.[npcId];
+    if (!romance) return;
+
+    const conversations = NPC_CONVERSATIONS[npcId] || [];
+    // Find first available conversation that matches trigger
+    const availableConv = conversations.find(c => c.trigger(romance));
+
+    if (availableConv) {
+      setActiveConversation({ npcId, conversation: availableConv });
+    } else {
+      pushNotif("💬 Already had this conversation!", "#888");
+    }
+  }, [gs.romance, pushNotif]);
+
+  const handleConversationChoice = useCallback((npcId, choice) => {
+    setGs(prev => {
+      const romance = prev.romance?.[npcId];
+      if (!romance) return prev;
+
+      let next = { ...prev };
+      const npc = romanceableNpcs.find(n => n.id === npcId);
+
+      // Apply stat effects
+      if (choice.effect) {
+        next = applyEffects(next, choice.effect);
+      }
+
+      // Update romance with new affection
+      const newAffection = Math.min(100, romance.affection + (choice.effect?.affection || 0));
+      const newStage = getRomanceStage(newAffection);
+
+      // Track conversation
+      const conversationIds = romance.conversations || [];
+      if (activeConversation?.conversation?.id && !conversationIds.includes(activeConversation.conversation.id)) {
+        conversationIds.push(activeConversation.conversation.id);
+      }
+
+      next.romance = {
+        ...next.romance,
+        [npcId]: {
+          ...romance,
+          affection: newAffection,
+          stage: newStage,
+          conversations: conversationIds,
+        },
+      };
+
+      // Show notification
+      const affectionChange = choice.effect?.affection || 0;
+      if (affectionChange !== 0) {
+        const msg = affectionChange > 0
+          ? `💕 ${npc?.name} likes that! (+${affectionChange})`
+          : `😔 ${npc?.name} wasn't impressed... (${affectionChange})`;
+        pushNotif(msg, affectionChange > 0 ? "#FF69B4" : "#E24B4A");
+      }
+
+      addLog(`💬 Talked with ${npc?.name}: "${choice.label}"`);
+
+      return next;
+    });
+  }, [gs.romance, romanceableNpcs, activeConversation, pushNotif, addLog, setGs]);
+
   const handleMinigameEnd = useCallback((results) => {
     if (results && results.rewards) {
       setGs(prev => {
@@ -557,6 +622,9 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
             handleFlirt(npcId);
             setShowRomance(false);
           }}
+          onTalk={(npcId) => {
+            handleTalk(npcId);
+          }}
         />
         <div style={{ marginTop: "0.5rem", display: "flex", gap: "0.5rem" }}>
           {romanceableNpcs.map(npc => {
@@ -745,6 +813,7 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
           romance={gs.romance}
           romanceableNpcs={romanceableNpcs}
           onFlirt={handleFlirt}
+          onTalk={handleTalk}
         />
 
         {/* ── CENTRAL LOCATION VIEWPORT ── */}
@@ -928,6 +997,16 @@ export default function GameScreen({ gs: externalGs, setGs: externalSetGs, onEnd
         {/* Music Player */}
         {showMusicPlayer && (
           <MusicPlayer onClose={() => setShowMusicPlayer(false)} />
+        )}
+
+        {/* Conversation Panel */}
+        {activeConversation && (
+          <ConversationPanel
+            conversation={activeConversation.conversation}
+            npcId={activeConversation.npcId}
+            onChoose={handleConversationChoice}
+            onClose={() => setActiveConversation(null)}
+          />
         )}
       </div>
     </div>

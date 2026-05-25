@@ -13,9 +13,9 @@ export const INITIAL_STATE = {
   major:null,
   studiedLessons:{},
   romance:{
-    classmate_mac:{ affection:0, dates:0, gifts:0, stage:"stranger" },
-    ate_nena:{ affection:0, dates:0, gifts:0, stage:"stranger" },
-    librarian:{ affection:0, dates:0, gifts:0, stage:"stranger" },
+    classmate_mac:{ affection:0, dates:0, gifts:0, stage:"stranger", conversations:[] },
+    rosa_cortez:{ affection:0, dates:0, gifts:0, stage:"stranger", conversations:[] },
+    librarian:{ affection:0, dates:0, gifts:0, stage:"stranger", conversations:[] },
   },
   minigameStats:{
     basketball:{ highScore:0, gamesPlayed:0 },
@@ -645,6 +645,129 @@ export const LOCATION_ART = {
     </svg>
   ),
 };
+
+// Conversation system - dialogue trees for NPCs
+export const NPC_CONVERSATIONS = {
+  rosa_cortez: [
+    {
+      id: "first_meet",
+      trigger: (romance) => romance?.stage === "stranger" && romance?.conversations?.includes?.("first_meet") === false,
+      npc: "Rosa Cortez",
+      location: "Canteen",
+      text: "Rosa looks up from wiping the counter. 'Oh, bagong face. Gusto mo ng kain?'",
+      choices: [
+        {
+          label: "Show interest in her",
+          text: "You ask about her day and listen carefully.",
+          effect: { affection: +8, stamina: -5 },
+          response: "Hala... ay, nag-appreciate ka talaga. Salamat, anak. Rare yan.",
+        },
+        {
+          label: "Ask about F1 racing",
+          text: "You mention how cool she must be, being into F1.",
+          effect: { affection: +6, stamina: -5 },
+          response: "Ay! Nakita mo sa akin? Hehe, oo talaga ako passionate dito. Masaya ka, pre.",
+        },
+        {
+          label: "Talk about dogs",
+          text: "You ask if she has any dogs and seem genuinely curious.",
+          effect: { affection: +7, stamina: -5 },
+          response: "May three kaming aso sa bahay! Puro golden retrievers. Ganahan ka ba? Next walk, dala mo ko!",
+        },
+        {
+          label: "Flirt awkwardly",
+          text: "You try to flirt but it comes off as creepy.",
+          effect: { affection: -3, stamina: -5 },
+          response: "Ah... alam mo, napakabilis mo ah. Nakakawala ng prestige mo yan.",
+        },
+      ],
+    },
+    {
+      id: "davao_talk",
+      trigger: (romance) => romance?.stage === "friendly" && romance?.conversations?.includes?.("davao_talk") === false,
+      npc: "Rosa Cortez",
+      location: "Canteen",
+      text: "Rosa sits down during her break. 'Alam mo, seryoso lang, kusog kaayo ka pag dating sa pag-intindi sa tao. Saan ka galing talaga?'",
+      choices: [
+        {
+          label: "Ask about Davao life",
+          text: "You ask what life in Davao is like for her.",
+          effect: { affection: +10, stamina: -10, focus: -5 },
+          response: "Ay sus, ay. Kanang-kana ka talaga. Ang Davao... peaceful lang pero bustling din. Miss ko sya sometimes.",
+        },
+        {
+          label: "Share your struggles",
+          text: "You open up about college stress and pressure.",
+          effect: { affection: +9, stamina: -10, stress: -15 },
+          response: "Naman, anak, alam ko ang feeling. Pero kaya mo yan. Tara, libre kita ng turon next time.",
+        },
+        {
+          label: "Try to impress her",
+          text: "You brag about your achievements.",
+          effect: { affection: -2, stamina: -10 },
+          response: "Hmm... ego lang yan makikita ko. Character ang importante, 'di ka lang achievements.",
+        },
+      ],
+    },
+    {
+      id: "dogs_passion",
+      trigger: (romance) => romance?.stage === "flustered" && romance?.conversations?.includes?.("dogs_passion") === false,
+      npc: "Rosa Cortez",
+      location: "Canteen",
+      text: "Rosa's eyes light up. 'You know what? Gusto mo bang makita ng aking dogs? May dog park kami nearby...'",
+      choices: [
+        {
+          label: "YES! Sounds amazing!",
+          text: "You show genuine excitement.",
+          effect: { affection: +12, stamina: -15, social: +5 },
+          response: "Hala, seryoso ka ba? Okay! Human sa shift ko, tara na! This means a lot sa akin talaga.",
+        },
+        {
+          label: "Maybe... if you're around",
+          text: "You seem interested but hesitant.",
+          effect: { affection: +4, stamina: -10 },
+          response: "Ay, hindi ka sure? Okay, no pressure. Pero alam ko pwede ka pa mag-enjoy pag talagang gusto mo.",
+        },
+        {
+          label: "Dogs aren't really my thing",
+          text: "You downplay your interest.",
+          effect: { affection: -5, stamina: -10 },
+          response: "Oh... okay then. Pag nag-change ka lang ng isip, hanapin mo ako. Pero alam mo, Hindi ka nag-effort talaga.",
+        },
+      ],
+    },
+  ],
+  librarian: [
+    {
+      id: "library_chat",
+      trigger: (romance) => romance?.stage === "stranger" && romance?.conversations?.includes?.("library_chat") === false,
+      npc: "Librarian Maria",
+      location: "Library",
+      text: "Maria whispers from behind the desk. 'Psst... You look like you're stressed. Need a quiet place to think?'",
+      choices: [
+        {
+          label: "Ask for reading recommendations",
+          text: "You show interest in what she enjoys.",
+          effect: { affection: +8, stamina: -5, focus: +5 },
+          response: "Oh, you want to know what I read? That's... really thoughtful of you.",
+        },
+        {
+          label: "Compliment her eyes",
+          text: "You try a direct compliment.",
+          effect: { affection: +3, stamina: -5 },
+          response: "Um... thanks. That's... forward. But I appreciate it.",
+        },
+        {
+          label: "Make a loud joke",
+          text: "You laugh loudly.",
+          effect: { affection: -8, stamina: -5 },
+          response: "SHHHHH! This is a library! Please, I have a reputation to maintain...",
+        },
+      ],
+    },
+  ],
+};
+
 export function clamp(v, min = 0, max = 100) {
   return Math.max(min, Math.min(max, v));
 }
